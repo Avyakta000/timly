@@ -1,11 +1,13 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../store/slices/authSlice";
 import { RootState, AppDispatch } from "../store";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/dashboard";
  
   // Accessing user from the Redux store
   const { user, status } = useSelector((state: RootState) => state.auth);
@@ -25,11 +27,19 @@ const Login = () => {
   };
 
   // Redirection logic when the user is logged in
+  // useEffect(() => {
+  //   if (user?.id && redirectPath) {
+  //     navigate(redirectPath);
+  //   }else if(user?.id && !redirectPath){
+  //     navigate('/dashboard')
+  //   }
+  // }, [navigate, redirectPath, user]);
+
   useEffect(() => {
     if (user?.id) {
-      navigate("/dashboard");
+      navigate(redirectPath);
     }
-  }, [navigate, user]);
+  }, [navigate, redirectPath, user]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
