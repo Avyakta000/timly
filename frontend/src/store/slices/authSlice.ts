@@ -63,8 +63,6 @@ export const checkAuth = createAsyncThunk(
         const response = await api.get('/auth/me'); // `/auth/me` to verify the authenticated user
         const user = response.data
         console.log(response.data, 'authenticated')
-         // Save user info to localStorage
-        localStorage.setItem('user', JSON.stringify(user));
         return user;
       } catch (error: any) {
         localStorage.removeItem('user');

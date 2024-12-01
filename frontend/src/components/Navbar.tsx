@@ -11,6 +11,7 @@ const Navbar: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>(); // Ensure dispatch is typed correctly
   const navigate = useNavigate();
 
+  // since user is an empty object initially (local storage so inorder to check empty object user.?id or user.?fullName to prevent flickring)
   const handleLogout = async () => {
     try {
       // Dispatch the logout async action
@@ -21,6 +22,7 @@ const Navbar: React.FC = () => {
     }
   };
 
+  console.log(user, 'user navbar')
   return (
     <nav className="bg-gray-800 p-4 flex items-center justify-around text-white">
       <Link
@@ -43,7 +45,7 @@ const Navbar: React.FC = () => {
         </li>
 
         {/* Show the Login link if not authenticated, else show Logout button */}
-        {!user ? (
+        {!user?.id ? (
           <li>
             <Link to="/login">Login</Link>
           </li>
