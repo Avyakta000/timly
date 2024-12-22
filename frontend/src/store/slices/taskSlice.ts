@@ -2,19 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { Task, AddTaskPayload, EditTaskPayload } from "../../types/task";
-
-// interface Task {
-//   id: string;
-//   title: string;
-//   description: string | null;
-//   startTime: string;
-//   endTime: string;
-//   priority: number;
-//   status: string;
-//   userId: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
+import client from '../../services/taskService';
+import { gql } from "@apollo/client";
 
 interface TasksState {
   tasks: Task[];
@@ -31,11 +20,38 @@ const initialState: TasksState = {
 };
 
 // Async thunk for fetching tasks
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-  const response = await api.get('tasks'); // Replace with your API URL
-  return response.data;
-});
+// export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
+//   const response = await api.get('tasks'); // Replace with your API URL
+//   return response.data;
+// });
 
+// GraphQL Query
+const GET_TASKS = gql`
+  query GetTasks($status: String, $sortBy: String, $order: String) {
+    tasks(status: $status, sortBy: $sortBy, order: $order) {
+      id
+      title
+      priority
+      status
+      startTime
+      endTime
+      updatedAt
+      createdAt
+    }
+  }
+`;
+
+// Async thunk to retrieve tasks form fastapi server
+export const fetchTasks = createAsyncThunk(
+  'tasks/fetchTasks',
+  async (filters: { status?: string; sortBy?: string; order?: string }) => {
+    const { data } = await client.query({
+      query: GET_TASKS,
+      variables: filters,
+    });
+    return data.tasks;
+  }
+);
 // Async thunk for deleting tasks
 export const deleteTasks = createAsyncThunk(
   'tasks/deleteTasks',

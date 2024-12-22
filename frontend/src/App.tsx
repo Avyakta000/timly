@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if(status==="idle"){
+    if (status === "idle") {
       dispatch(checkAuth());
     }
   }, [dispatch, status]);
@@ -24,8 +24,10 @@ const App: React.FC = () => {
   return (
     <>
       <Navbar />
-      <main className="max-w-screen-lg h-screen mx-auto">
-        <Outlet />
+      <main className="flex flex-col min-h-screen max-w-screen-lg mx-auto">
+        <div className="flex-grow">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </>
