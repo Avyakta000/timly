@@ -32,8 +32,8 @@ const Dashboard: React.FC = () => {
   if (status === "error") return <div>Error loading stats</div>;
 
   const handleProfileEdit = () => {
-    // window.location.href = "https://easymanage.quicklit.in/dashboard/profile";
-    window.location.href = "http://localhost:5174/dashboard/profile";
+    window.location.href = "https://easymanage.quicklit.in/dashboard/profile";
+    // window.location.href = "http://localhost:5174/dashboard/profile";
   };
   return (
     <div className="flex h-screen bg-gray-100">
