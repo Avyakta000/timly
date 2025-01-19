@@ -26,20 +26,16 @@ const Login = () => {
     dispatch(login(inputs));
   };
 
-  // Redirection logic when the user is logged in
-  // useEffect(() => {
-  //   if (user?.id && redirectPath) {
-  //     navigate(redirectPath);
-  //   }else if(user?.id && !redirectPath){
-  //     navigate('/dashboard')
-  //   }
-  // }, [navigate, redirectPath, user]);
-
   useEffect(() => {
     if (user?.id) {
       navigate(redirectPath);
     }
   }, [navigate, redirectPath, user]);
+
+  const handleGoogleLogin = () => {
+    // Redirect the user to your Google OAuth route
+    window.location.href = '/api/auth/google';
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -82,6 +78,15 @@ const Login = () => {
           >
             {"Don't"} have an account?
           </Link>
+
+           {/* Google Login Button */}
+      <button
+        type="button"
+        onClick={handleGoogleLogin}
+        className="w-full px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-400 mb-4"
+      >
+        Login with Google
+      </button>
           <button
             type="submit"
             className={`w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-400 ${status === "loading" ? "opacity-75 cursor-not-allowed" : ""}`}

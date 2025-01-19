@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build:
+      context: G:/assessment_reunion/frontend  # path to React app
+    ports:
+      - "3000:3000"  # map React development server to localhost:3000
+    networks:
+      - app-network
+      - assessment_default  # connect to Project 2 network
+
+    # environment:
+    #   - REACT_APP_FASTAPI_URL=http://fastapi:8000  # FastAPI backend service
+    #   - REACT_APP_PROJECT2_BACKEND_URL=http://project2-backend:5000  # Existing Project 2 backend container
+
+    command: npm run dev -- --host --port 3000  # start React development server
+
+  fastapi:
+    build:
+      context: G:/graphql/server  # path to FastAPI backend
+    ports:
+      - "8000:8000"  # map FastAPI backend to localhost:8000
+    networks:
+      - app-network
+      - assessment_default  # connect to Project 2 network
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+networks:
+  app-network:
+    driver: bridge
+    internal: true  
+  assessment_default:
+    external: true  # use the existing `assessment_default` network
+
