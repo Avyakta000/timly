@@ -16,10 +16,10 @@ const App: React.FC = () => {
     }
   }, [dispatch, status]);
 
-  // if (status === "loading") {
-  //   console.log('app.jsx')
-  //   return null
-  // }
+  if (status === "loading" || status === "idle") {
+    console.log('app.jsx')
+    return null
+  }
 
   return (
     <>

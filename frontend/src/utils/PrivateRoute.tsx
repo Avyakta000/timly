@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store'; // Adjust the import path based on your project structure
+import { RootState } from '../store';
 
 const PrivateRoute: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);

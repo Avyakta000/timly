@@ -1,17 +1,17 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { login } from "../store/slices/authSlice";
+import { googleAuthCallback, googleLogin, login } from "../store/slices/authSlice";
 import { RootState, AppDispatch } from "../store";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const redirectPath = new URLSearchParams(location.search).get("redirect") || "/dashboard";
- 
+
   // Accessing user from the Redux store
   const { user, status } = useSelector((state: RootState) => state.auth);
-  
+
   // Local state for form fields
   const [inputs, setInputs] = useState({
     email: "",
@@ -32,9 +32,20 @@ const Login = () => {
     }
   }, [navigate, redirectPath, user]);
 
+
+  // Extract "code" from the URL when user is redirected from Google
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+
+    if (code) {
+      dispatch(googleAuthCallback(code));
+    }
+  }, [dispatch, location.search]);
+
+
   const handleGoogleLogin = () => {
-    // Redirect the user to your Google OAuth route
-    window.location.href = '/api/auth/google';
+    dispatch(googleLogin());
   };
 
   return (
@@ -79,21 +90,23 @@ const Login = () => {
             {"Don't"} have an account?
           </Link>
 
-           {/* Google Login Button */}
-      <button
-        type="button"
-        onClick={handleGoogleLogin}
-        className="w-full px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-400 mb-4"
-      >
-        Login with Google
-      </button>
           <button
             type="submit"
-            className={`w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-400 ${status === "loading" ? "opacity-75 cursor-not-allowed" : ""}`}
+            className={`w-full px-4 py-2 mb-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-400 ${status === "loading" ? "opacity-75 cursor-not-allowed" : ""}`}
             disabled={status === "loading"}
           >
             {status === "loading" ? "Loading..." : "Login"}
           </button>
+
+          {/* Google Login Button */}
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-400 mb-4"
+          >
+            Login with Google
+          </button>
+          
         </form>
       </div>
     </div>

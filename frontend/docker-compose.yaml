@@ -6,7 +6,7 @@ services:
       - "3000:3000"  # map React development server to localhost:3000
     networks:
       - app-network
-      - assessment_default  # connect to Project 2 network
+      - assessment_app_network  # connect to Project 2 network
 
     # environment:
     #   - REACT_APP_FASTAPI_URL=http://fastapi:8000  # FastAPI backend service
@@ -21,13 +21,13 @@ services:
       - "8000:8000"  # map FastAPI backend to localhost:8000
     networks:
       - app-network
-      - assessment_default  # connect to Project 2 network
+      - assessment_app_network  # connect to Project 2 network
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 networks:
   app-network:
     driver: bridge
     internal: true  
-  assessment_default:
-    external: true  # use the existing `assessment_default` network
+  assessment_app_network:
+    external: true  # use the existing `assessment_app_network` network
 
